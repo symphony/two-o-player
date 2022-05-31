@@ -15,12 +15,13 @@ class Game
 
     puts "\n--- Question for P#{user.name} ---"
     puts "Player #{questioner.name} asks: #{q.question}"
-    if not q.correct? self.get_guess
+
+    if q.correct? self.get_guess
+      puts "P#{user.name} was correct!"
+    else
       puts "P#{user.name} was incorrect!"
       user.lost_a_life
-      return questioner if user.is_out_of_lives?
-    else
-      puts "P#{user.name} was correct!"
+      return questioner if user.is_out_of_lives? # return winner
     end
 
     swapped = questioner, user
@@ -29,7 +30,8 @@ class Game
   end
 
   def start_game players
-    winner = self.play_round players
+    puts "- Welcome. Try to guess the correct number -\n"
+    winner = self.play_round players # find winner recursively
     puts "\nResults: Player #{winner.name} is the winner with a score of #{winner.lives}/3"
     puts "--- thanks for playing ---"
   end
