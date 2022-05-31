@@ -47,8 +47,7 @@ class Manager
 
   def end
     puts "\n--- game over ---"
-    puts "Player #{@winner} is the winner!"
-    puts "P#{@players[0].id}: #{@players[0].lives}/3 vs P#{@players[1].id}: #{@players[1].lives}/3"
+    puts "Player #{@winner} is the winner with a score of #{@players[self.opponent].lives}/3"
     puts "good bye"
   end
 end
