@@ -6,6 +6,10 @@ class Player
     @lives = 3
   end
 
+  def lost?
+    @lives <= 0
+  end
+
   def miss
     @lives -= 1
   end
