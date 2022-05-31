@@ -37,7 +37,7 @@ class Manager
   end
 
   def ask
-    num1, num2 = 1, 2 # todo randomize
+    num1, num2 = rand(1...20), rand(1...20)
     puts "Player #{@players[@current].id} asks: What does #{num1} plus #{num2} equal?"
     self.validate num1 + num2, gets.chomp
   end
