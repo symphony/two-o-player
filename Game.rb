@@ -1,33 +1,33 @@
 class Game
-  def format_score p
-    "- P#{p[0].name}: #{p[0].lives}/3 vs P#{p[1].name}: #{p[1].lives}/3 -"
+
+  def initialize players
+    @players = players
   end
 
-  def play_round players, odd_round = false
-    player, questioner = players
-    q = Question.new
+  def score
+    p1, p2 = @players
+    "- P#{p1.name}: #{p1.lives}/3 vs P#{p2.name}: #{p2.lives}/3 -"
+  end
 
-    # ask question
-    puts "\n--- Question for P#{player.name} ---"
-    puts "Player #{questioner.name} asks: #{q.question}"
+  def play players
+    round = Round.new(players, Question.new)
+    p1, p2 = players
 
-    if q.correct? gets.chomp
-      puts "P#{player.name} was correct!"
-    else
-      puts "P#{player.name} was incorrect!"
-      player.lost_a_life
-      return questioner if player.is_out_of_lives? # return winner
+    if !round.prompt { gets.chomp }
+      p1.lost_a_life
+      return p2 if p1.is_out_of_lives? # return winner
     end
 
-    swapped = questioner, player
-    puts self.format_score (odd_round ? swapped : players)
-    self.play_round swapped, !odd_round
+    puts self.score
+
+    swapped = p2, p1
+    self.play swapped # again!
   end
 
-  def start_game players
+  def start
     puts "- Welcome. Try to guess the correct number -\n"
 
-    winner = self.play_round players # find winner recursively
+    winner = self.play @players # find winner recursively
 
     puts "\nResults: Player #{winner.name} is the winner with a score of #{winner.lives}/3"
     puts "--- thanks for playing ---"
