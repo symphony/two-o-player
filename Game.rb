@@ -4,6 +4,11 @@ class Game
     gets.chomp.to_i
   end
 
+  def results winner
+    puts "\n--- thanks for playing ---"
+    puts "Player #{winner.name} is the winner with a score of #{winner.lives}/3"
+  end
+
   def score p1, p2
     "P#{p1.name}: #{p1.lives}/3 vs P#{p2.name}: #{p2.lives}/3"
   end
@@ -24,14 +29,9 @@ class Game
       return questioner if user.is_out_of_lives?
     end
 
-    # puts self.score p1, p2 # todo figure how to pass fixed order. yield?
+    puts self.score user, questioner # todo figure how to pass fixed order. yield?
     swapped = questioner, user
     self.play_round swapped
-  end
-
-  def results winner
-    puts "\n--- thanks for playing ---"
-    puts "Player #{winner.name} is the winner with a score of #{winner.lives}/3"
   end
 
   def start_game players
