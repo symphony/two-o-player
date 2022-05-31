@@ -1,10 +1,4 @@
-require './Question'
-
 class Game
-  def get_guess
-    gets.chomp.to_i
-  end
-
   def format_score p
     "- P#{p[0].name}: #{p[0].lives}/3 vs P#{p[1].name}: #{p[1].lives}/3 -"
   end
@@ -17,7 +11,7 @@ class Game
     puts "\n--- Question for P#{player.name} ---"
     puts "Player #{questioner.name} asks: #{q.question}"
 
-    if q.correct? self.get_guess
+    if q.correct? gets.chomp
       puts "P#{player.name} was correct!"
     else
       puts "P#{player.name} was incorrect!"

@@ -13,6 +13,6 @@ class Question
   end
 
   def correct? guess
-    guess == self.answer
+    guess.to_i == self.answer
   end
 end
