@@ -9,29 +9,32 @@ class Game
     "- P#{p[0].name}: #{p[0].lives}/3 vs P#{p[1].name}: #{p[1].lives}/3 -"
   end
 
-  def play_round players, odd = false
-    user, questioner = players
+  def play_round players, odd_round = false
+    player, questioner = players
     q = Question.new
 
-    puts "\n--- Question for P#{user.name} ---"
+    # ask question
+    puts "\n--- Question for P#{player.name} ---"
     puts "Player #{questioner.name} asks: #{q.question}"
 
     if q.correct? self.get_guess
-      puts "P#{user.name} was correct!"
+      puts "P#{player.name} was correct!"
     else
-      puts "P#{user.name} was incorrect!"
-      user.lost_a_life
-      return questioner if user.is_out_of_lives? # return winner
+      puts "P#{player.name} was incorrect!"
+      player.lost_a_life
+      return questioner if player.is_out_of_lives? # return winner
     end
 
-    swapped = questioner, user
-    puts self.format_score (odd ? swapped : players)
-    self.play_round swapped, !odd
+    swapped = questioner, player
+    puts self.format_score (odd_round ? swapped : players)
+    self.play_round swapped, !odd_round
   end
 
   def start_game players
     puts "- Welcome. Try to guess the correct number -\n"
+
     winner = self.play_round players # find winner recursively
+
     puts "\nResults: Player #{winner.name} is the winner with a score of #{winner.lives}/3"
     puts "--- thanks for playing ---"
   end
