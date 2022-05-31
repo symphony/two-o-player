@@ -1,45 +1,41 @@
-require './Question'
-
 class Game
-  def initialize players
-    @players = players
-    @current = 0 # player index
-    @winner = -1 # no winner
+
+  def get_guess
+    gets.chomp.to_i
   end
 
-# helpers
-  def opponent
-    (@current + 1) % @players.length # cycles between players
+  def score p1, p2
+    "P#{p1.name}: #{p1.lives}/3 vs P#{p2.name}: #{p2.lives}/3"
   end
 
-  def score
-    p1, p2 = @players
-    "P#{p1.id}: #{p1.lives}/3 vs P#{p2.id}: #{p2.lives}/3"
+  def ask_user? player, q
+    puts "\nPlayer #{player} asks: #{q.question}"
+    correct = q.correct? self.get_guess
+    puts correct && "- Correct! -" || "- Incorrect! -"
+    correct
   end
 
-  def next_turn player, opponent
+  def play_round players
+    user, questioner = players
     q = Question.new
-    puts "Player #{opponent} asks: #{q.question}"
-    player.miss if not q.correct? gets.chomp
-    @winner = opponent if player.lost?
+
+    if !self.ask_user? questioner.name, q
+      user.lost_a_life
+      return questioner if user.is_out_of_lives?
+    end
+
+    # puts self.score p1, p2 # todo figure how to pass fixed order. yield?
+    swapped = questioner, user
+    self.play_round swapped
   end
 
-
-# game flow
-  def start_game
-    self.loop_game until @winner != -1 # loop until winner
-    self.end_game
+  def results winner
+    puts "\n--- thanks for playing ---"
+    puts "Player #{winner.name} is the winner with a score of #{winner.lives}/3"
   end
 
-  def loop_game
-    self.next_turn @players[@current], self.opponent
-    puts self.score
-    @current = self.opponent
-  end
-
-  def end_game
-    puts "\n--- game over ---"
-    puts "Player #{@winner} is the winner with a score of #{@players[@winner].lives}/3"
-    puts "- good bye -"
+  def start_game players
+    winner = self.play_round players
+    self.results winner
   end
 end

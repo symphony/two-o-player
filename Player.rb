@@ -1,16 +1,16 @@
 class Player
-  attr_reader :id, :lives
+  attr_reader :name, :lives
 
-  def initialize id
-    @id = id
+  def initialize name
+    @name = name
     @lives = 3
   end
 
-  def lost?
-    @lives <= 0
+  def lost_a_life
+    @lives -= 1
   end
 
-  def miss
-    @lives -= 1
+  def is_out_of_lives?
+    self.lives <= 0
   end
 end
