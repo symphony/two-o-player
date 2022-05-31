@@ -1,41 +1,36 @@
-class Game
+require './Question'
 
+class Game
   def get_guess
     gets.chomp.to_i
   end
 
-  def results winner
-    puts "\n--- thanks for playing ---"
-    puts "Player #{winner.name} is the winner with a score of #{winner.lives}/3"
+  def format_score p
+    "- P#{p[0].name}: #{p[0].lives}/3 vs P#{p[1].name}: #{p[1].lives}/3 -"
   end
 
-  def score p1, p2
-    "P#{p1.name}: #{p1.lives}/3 vs P#{p2.name}: #{p2.lives}/3"
-  end
-
-  def ask_user? player, q
-    puts "\nPlayer #{player} asks: #{q.question}"
-    correct = q.correct? self.get_guess
-    puts correct && "- Correct! -" || "- Incorrect! -"
-    correct
-  end
-
-  def play_round players
+  def play_round players, odd = false
     user, questioner = players
     q = Question.new
 
-    if !self.ask_user? questioner.name, q
+    puts "\n--- Question for P#{user.name} ---"
+    puts "Player #{questioner.name} asks: #{q.question}"
+    if not q.correct? self.get_guess
+      puts "P#{user.name} was incorrect!"
       user.lost_a_life
       return questioner if user.is_out_of_lives?
+    else
+      puts "P#{user.name} was correct!"
     end
 
-    puts self.score user, questioner # todo figure how to pass fixed order. yield?
     swapped = questioner, user
-    self.play_round swapped
+    puts self.format_score (odd ? swapped : players)
+    self.play_round swapped, !odd
   end
 
   def start_game players
     winner = self.play_round players
-    self.results winner
+    puts "\nResults: Player #{winner.name} is the winner with a score of #{winner.lives}/3"
+    puts "--- thanks for playing ---"
   end
 end
