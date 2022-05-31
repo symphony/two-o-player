@@ -1,11 +1,9 @@
 class Player
+  attr_reader :id, :lives
+
   def initialize id
     @id = id
     @lives = 3
-  end
-
-  def id
-    @id
   end
 
   def miss
@@ -15,45 +13,61 @@ end
 
 
 class Manager
+
   def initialize
     @winner = -1
+    @players = []
+    @current = 0
   end
 
-  def ask
-    num1, num2 = 1, 2 # todo randomize
-    puts "Player #{@player1.id} asks: What does #{num1} plus #{num2} equal?"
-    self.validate num1 + num2, gets.chomp
+
+# helpers
+  def opponent
+    (@current + 1) % 2
+  end
+
+  def score
+    "P#{@players[0].id}: #{@players[0].lives}/3 vs P#{@players[1].id}: #{@players[1].lives}/3"
   end
 
   def validate answer, guess
     return puts "Correct!" if answer == guess.to_i
     puts "Incorrect!"
-    @winner = @player1.id if @player1.miss == 0
+    @winner = @players[@current].id if @players[self.opponent].miss == 0 # out of lives
   end
 
+  def ask
+    num1, num2 = 1, 2 # todo randomize
+    puts "Player #{@players[@current].id} asks: What does #{num1} plus #{num2} equal?"
+    self.validate num1 + num2, gets.chomp
+  end
+
+
+# game flow
   def start
-    @player1 = Player.new "1"
-    @player2 = Player.new "2"
+    @players << Player.new("1") << Player.new("2")
 
     self.loop while @winner == -1
+
     self.end
   end
 
   def loop
-    puts 'is there a winner? ' + @winner.to_s
-    puts "--- new turn ---"
+    puts "\n--- new turn ---"
     self.ask
+    puts self.score
+    @current = self.opponent
   end
 
   def end
-    puts "--- game over ---"
+    puts "\n--- game over ---"
     puts "Player #{@winner} is the winner!"
+    puts "P#{@players[0].id}: #{@players[0].lives}/3 vs P#{@players[1].id}: #{@players[1].lives}/3"
     puts "good bye"
   end
-
 end
 
 
+# driver
 game1 = Manager.new
-
 game1.start
