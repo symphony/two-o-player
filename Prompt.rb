@@ -1,11 +1,11 @@
-class Round
+class Prompt
 
   def initialize players, question
     @player, @questioner = players
     @q = question
   end
 
-  def prompt
+  def ask
     puts "\n--- Question for P#{@player.name} ---"
     puts "Player #{@questioner.name} asks: #{@q.question}"
 

@@ -10,15 +10,15 @@ class Game
   end
 
   def play players
-    p1, p2 = players
-    round = Round.new(players, Question.new)
+    player, opponent = players
+    prompt = Prompt.new(players, Question.new)
 
-    p1.lose_a_life if !round.prompt { gets.chomp } # ask question
-    return p2 if p1.is_out_of_lives? # return winner
+    player.lose_a_life if !prompt.ask { gets.chomp } # ask player
+    return opponent if player.is_out_of_lives? # return winner
 
     puts self.score
 
-    swapped = p2, p1
+    swapped = opponent, player
     self.play swapped # go again!
   end
 
@@ -30,4 +30,5 @@ class Game
     puts "\nResults: Player #{winner.name} is the winner with a score of #{winner.lives}/3"
     puts "--- thanks for playing ---"
   end
+
 end
