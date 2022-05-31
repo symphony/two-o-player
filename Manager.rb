@@ -1,8 +1,8 @@
 class Manager
 
   def initialize
-    @winner = -1
     @players = []
+    @winner = -1
     @current = 0
   end
 
@@ -24,6 +24,7 @@ class Manager
 
   def ask
     num1, num2 = rand(1...20), rand(1...20)
+    puts "\n--- new turn ---"
     puts "Player #{@players[@current].id} asks: What does #{num1} plus #{num2} equal?"
     self.validate num1 + num2, gets.chomp
   end
@@ -31,15 +32,12 @@ class Manager
 
 # game flow
   def start
-    @players << Player.new("1") << Player.new("2")
-
+    @players << Player.new(1) << Player.new(2)
     self.loop while @winner == -1
-
     self.end
   end
 
   def loop
-    puts "\n--- new turn ---"
     self.ask
     puts self.score
     @current = self.opponent
@@ -47,7 +45,7 @@ class Manager
 
   def end
     puts "\n--- game over ---"
-    puts "Player #{@winner} is the winner with a score of #{@players[self.opponent].lives}/3"
+    puts "Player #{@winner} is the winner with a score of #{@players[@winner-1].lives}/3"
     puts "good bye"
   end
 end
