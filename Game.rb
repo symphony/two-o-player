@@ -13,7 +13,7 @@ class Game
     p1, p2 = players
     round = Round.new(players, Question.new)
 
-    p1.lose_a_life if !round.prompt { gets.chomp }
+    p1.lose_a_life if !round.prompt { gets.chomp } # ask question
     return p2 if p1.is_out_of_lives? # return winner
 
     puts self.score
